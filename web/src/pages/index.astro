@@ -1,4 +1,6 @@
 ---
+import "../styles/global.css";
+
 const res = await fetch("https://security-news-blog-cms.onrender.com/api/posts");
 const { data: posts }: { data: { slug: string; title: string }[] } = await res.json();
 ---
