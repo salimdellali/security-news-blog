@@ -1,0 +1,45 @@
+# Render Blueprint (infrastructure as code): https://render.com/docs/blueprint-spec
+# Launch once via dashboard: New → Blueprint → select this repo.
+# Secrets (sync: false) are prompted for in the dashboard and never live in git.
+services:
+  - type: web
+    name: security-news-blog-cms
+    runtime: node
+    plan: free
+    rootDir: cms
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    healthCheckPath: /_health
+    envVars:
+      - key: NODE_VERSION
+        value: 26.4.0
+      - key: NODE_ENV
+        value: production
+      # Strapi secrets — copy values from cms/.env
+      - key: APP_KEYS
+        sync: false
+      - key: API_TOKEN_SALT
+        sync: false
+      - key: ADMIN_JWT_SECRET
+        sync: false
+      - key: TRANSFER_TOKEN_SALT
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: ENCRYPTION_KEY
+        sync: false
+      # Neon Postgres — copy values from cms/.env
+      - key: DATABASE_CLIENT
+        value: postgres
+      - key: DATABASE_HOST
+        sync: false
+      - key: DATABASE_PORT
+        value: "5432"
+      - key: DATABASE_NAME
+        value: neondb
+      - key: DATABASE_USERNAME
+        sync: false
+      - key: DATABASE_PASSWORD
+        sync: false
+      - key: DATABASE_SSL
+        value: "true"
