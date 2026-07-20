@@ -1,0 +1,24 @@
+---
+interface Props {
+	slug: string;
+	title: string;
+	excerpt: string;
+}
+
+const { slug, title, excerpt } = Astro.props;
+---
+
+<article>
+	<h2 class="text-lg font-semibold">
+		<a class="hover:text-primary-hover" href={`/posts/${slug}`}>{title}</a>
+	</h2>
+	<p class="mt-1 text-sm text-muted-foreground-1">{excerpt}</p>
+	<p class="mt-2">
+		<a
+			class="inline-flex items-center gap-x-1 text-sm text-primary underline decoration-2 hover:text-primary-hover"
+			href={`/posts/${slug}`}
+		>
+			Continue reading
+		</a>
+	</p>
+</article>

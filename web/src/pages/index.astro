@@ -1,27 +1,17 @@
 ---
-import "../styles/global.css";
+import Layout from "../layouts/Layout.astro";
+import PostCard from "../components/PostCard.astro";
 
 const res = await fetch("https://security-news-blog-cms.onrender.com/api/posts");
-const { data: posts }: { data: { slug: string; title: string }[] } = await res.json();
+const { data: posts }: { data: { slug: string; title: string; excerpt: string }[] } = await res.json();
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Security News Blog</title>
-	</head>
-	<body>
-		<nav style="text-align: center;">Security News Blog</nav>
-		<ul>
-			{posts.map((post) => (
-				<li>
-					<a href={`/posts/${post.slug}`}>{post.title}</a>
-				</li>
-			))}
-		</ul>
-	</body>
-</html>
+<Layout title="Security News Blog">
+	<ul class="space-y-10">
+		{posts.map((post) => (
+			<li>
+				<PostCard slug={post.slug} title={post.title} excerpt={post.excerpt} />
+			</li>
+		))}
+	</ul>
+</Layout>
