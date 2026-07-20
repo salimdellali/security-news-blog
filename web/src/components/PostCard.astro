@@ -3,22 +3,36 @@ interface Props {
 	slug: string;
 	title: string;
 	excerpt: string;
+	publishedAt: string;
+	updatedAt: string;
+	authorName: string;
 }
 
-const { slug, title, excerpt } = Astro.props;
+const { slug, title, excerpt, publishedAt, updatedAt, authorName } = Astro.props;
+
+const dateFormat: Intl.DateTimeFormatOptions = { year: "numeric", month: "short", day: "numeric" };
+const publishedDate = new Date(publishedAt).toLocaleDateString("en-US", dateFormat);
+const updatedDate = new Date(updatedAt).toLocaleDateString("en-US", dateFormat);
+const wasUpdated = updatedDate !== publishedDate;
 ---
 
-<article>
+<article class="flex h-full flex-col gap-2 rounded-2xl border border-border p-6">
 	<h2 class="text-lg font-semibold">
 		<a class="hover:text-primary-hover" href={`/posts/${slug}`}>{title}</a>
 	</h2>
-	<p class="mt-1 text-sm text-muted-foreground-1">{excerpt}</p>
-	<p class="mt-2">
+	<p class="text-sm text-muted-foreground-1">{excerpt}</p>
+
+	<div class="mt-auto flex items-end justify-between gap-x-4">
+		<p class="text-xs text-muted-foreground-2">
+			Published by {authorName} &middot; {publishedDate}
+			{wasUpdated && <> &middot; Last updated {updatedDate}</>}
+		</p>
+
 		<a
-			class="inline-flex items-center gap-x-1 text-sm text-primary underline decoration-2 hover:text-primary-hover"
+			class="inline-flex shrink-0 items-center gap-x-1 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover"
 			href={`/posts/${slug}`}
 		>
-			Continue reading
+			Continue reading →
 		</a>
-	</p>
+	</div>
 </article>
