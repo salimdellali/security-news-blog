@@ -1,5 +1,6 @@
 ---
-
+const res = await fetch("https://security-news-blog-cms.onrender.com/api/posts");
+const { data: posts }: { data: { slug: string; title: string }[] } = await res.json();
 ---
 
 <html lang="en">
@@ -9,9 +10,16 @@
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>Security News Blog</title>
 	</head>
 	<body>
-		<h1>Astro</h1>
+		<nav style="text-align: center;">Security News Blog</nav>
+		<ul>
+			{posts.map((post) => (
+				<li>
+					<a href={`/posts/${post.slug}`}>{post.title}</a>
+				</li>
+			))}
+		</ul>
 	</body>
 </html>
