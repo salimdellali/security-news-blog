@@ -1,0 +1,37 @@
+---
+import PostCard from "./PostCard.astro";
+
+export interface Post {
+	slug: string;
+	title: string;
+	excerpt: string;
+	publishedAt: string;
+	updatedAt: string;
+	createdBy: { firstname: string; lastname: string };
+}
+
+interface Props {
+	posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+
+{posts.length === 0 ? (
+	<p class="text-center text-3xl text-muted-foreground-1">No posts published yet, stay tuned.</p>
+) : (
+	<ul class="space-y-6">
+		{posts.map((post) => (
+			<li>
+				<PostCard
+					slug={post.slug}
+					title={post.title}
+					excerpt={post.excerpt}
+					publishedAt={post.publishedAt}
+					updatedAt={post.updatedAt}
+					authorName={`${post.createdBy.firstname} ${post.createdBy.lastname}`}
+				/>
+			</li>
+		))}
+	</ul>
+)}

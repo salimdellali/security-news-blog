@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@theme {
+	--font-sans: var(--font-inter);
+	--font-mono: var(--font-roboto-mono);
+}
+
 /* Preline UI */
 @source "../../node_modules/preline/dist/*.js";
 @import "../../node_modules/preline/variants.css";

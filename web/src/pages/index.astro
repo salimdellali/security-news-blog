@@ -1,33 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import PostCard from "../components/PostCard.astro";
+import PostList, { type Post } from "../components/PostList.astro";
 
 const res = await fetch("https://security-news-blog-cms.onrender.com/api/posts?populate=createdBy");
-const { data: posts }: {
-	data: {
-		slug: string;
-		title: string;
-		excerpt: string;
-		publishedAt: string;
-		updatedAt: string;
-		createdBy: { firstname: string; lastname: string };
-	}[];
-} = await res.json();
+const { data: posts }: { data: Post[] } = await res.json();
 ---
 
 <Layout title="Security News Blog">
-	<ul class="space-y-6">
-		{posts.map((post) => (
-			<li>
-				<PostCard
-					slug={post.slug}
-					title={post.title}
-					excerpt={post.excerpt}
-					publishedAt={post.publishedAt}
-					updatedAt={post.updatedAt}
-					authorName={`${post.createdBy.firstname} ${post.createdBy.lastname}`}
-				/>
-			</li>
-		))}
-	</ul>
+	<PostList posts={posts} />
 </Layout>
