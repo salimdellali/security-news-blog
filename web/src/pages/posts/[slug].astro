@@ -1,6 +1,7 @@
 ---
 import { marked } from "marked";
 import Layout from "../../layouts/Layout.astro";
+import PostCard from "../../components/PostCard.astro";
 
 interface Post {
 	slug: string;
@@ -15,14 +16,19 @@ interface Post {
 export async function getStaticPaths() {
 	const res = await fetch("https://security-news-blog-cms.onrender.com/api/posts?populate=createdBy");
 	const { data: posts }: { data: Post[] } = await res.json();
+	const postsSortedByPublishedAt = [...posts].sort((a, b) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime());
 
-	return posts.map((post) => ({
+	return postsSortedByPublishedAt.map((post, index) => ({
 		params: { slug: post.slug },
-		props: { post },
+		props: {
+			post,
+			olderPost: postsSortedByPublishedAt[index - 1] ?? null,
+			newerPost: postsSortedByPublishedAt[index + 1] ?? null,
+		},
 	}));
 }
 
-const { post } = Astro.props as { post: Post };
+const { post, olderPost, newerPost } = Astro.props as { post: Post; olderPost: Post | null; newerPost: Post | null };
 
 const dateFormat: Intl.DateTimeFormatOptions = {
 	year: "numeric",
@@ -52,5 +58,39 @@ const bodyHtml = await marked.parse(post.body);
 			{post.excerpt}
 		</blockquote>
 		<div class="prose prose-neutral prose-lg mt-6 max-w-none prose-headings:mt-6" set:html={bodyHtml} />
+
+		{(olderPost || newerPost) && (
+			<div class="mt-10 border-t border-border pt-10">
+				<p class="text-center font-mono text-lg text-muted-foreground">Do you like reading these posts? Read more</p>
+				<div class="mt-10 grid gap-4 sm:grid-cols-2">
+					{olderPost && (
+						<div class="flex flex-col gap-2">
+							<p class="text-center text-sm font-medium text-muted-foreground-1 sm:text-left">Older post</p>
+							<PostCard
+								slug={olderPost.slug}
+								title={olderPost.title}
+								excerpt={olderPost.excerpt}
+								publishedAt={olderPost.publishedAt}
+								updatedAt={olderPost.updatedAt}
+								authorName={`${olderPost.createdBy.firstname} ${olderPost.createdBy.lastname}`}
+							/>
+						</div>
+					)}
+					{newerPost && (
+						<div class="flex flex-col gap-2 sm:col-start-2">
+							<p class="text-center text-sm font-medium text-muted-foreground-1 sm:text-right">Newer post</p>
+							<PostCard
+								slug={newerPost.slug}
+								title={newerPost.title}
+								excerpt={newerPost.excerpt}
+								publishedAt={newerPost.publishedAt}
+								updatedAt={newerPost.updatedAt}
+								authorName={`${newerPost.createdBy.firstname} ${newerPost.createdBy.lastname}`}
+							/>
+						</div>
+					)}
+				</div>
+			</div>
+		)}
 	</article>
 </Layout>
