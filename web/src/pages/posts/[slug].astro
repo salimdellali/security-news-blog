@@ -1,0 +1,47 @@
+---
+import { marked } from "marked";
+import Layout from "../../layouts/Layout.astro";
+
+interface Post {
+	slug: string;
+	title: string;
+	body: string;
+	publishedAt: string;
+	updatedAt: string;
+	createdBy: { firstname: string; lastname: string };
+}
+
+export async function getStaticPaths() {
+	const res = await fetch("https://security-news-blog-cms.onrender.com/api/posts?populate=createdBy");
+	const { data: posts }: { data: Post[] } = await res.json();
+
+	return posts.map((post) => ({
+		params: { slug: post.slug },
+		props: { post },
+	}));
+}
+
+const { post } = Astro.props as { post: Post };
+
+const dateFormat: Intl.DateTimeFormatOptions = { year: "numeric", month: "short", day: "numeric" };
+const publishedDate = new Date(post.publishedAt).toLocaleDateString("en-US", dateFormat);
+const updatedDate = new Date(post.updatedAt).toLocaleDateString("en-US", dateFormat);
+const wasUpdated = updatedDate !== publishedDate;
+const authorName = `${post.createdBy.firstname} ${post.createdBy.lastname}`;
+
+const bodyHtml = await marked.parse(post.body);
+---
+
+<Layout title={post.title}>
+	<article>
+		<a class="inline-flex items-center gap-x-1 text-sm text-muted-foreground-1 hover:text-primary-hover" href="/">
+			&larr; Back to home
+		</a>
+		<h1 class="mt-4 font-mono text-2xl font-semibold sm:text-3xl">{post.title}</h1>
+		<p class="mt-2 text-xs text-muted-foreground">
+			Published by {authorName} &middot; {publishedDate}
+			{wasUpdated && <> &middot; Last updated {updatedDate}</>}
+		</p>
+		<div class="prose prose-neutral mt-8 max-w-none" set:html={bodyHtml} />
+	</article>
+</Layout>
