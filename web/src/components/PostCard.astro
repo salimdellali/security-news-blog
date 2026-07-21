@@ -22,17 +22,17 @@ const wasUpdated = updatedDate !== publishedDate;
 	</h2>
 	<p class="text-sm text-muted-foreground-1">{excerpt}</p>
 
-	<div class="mt-auto flex items-end justify-between gap-x-4">
-		<p class="text-xs text-muted-foreground-2">
+	<div class="mt-auto flex flex-col gap-3 pt-4 sm:flex-row sm:items-end sm:justify-between sm:gap-x-4 sm:pt-0">
+		<p class="text-xs text-muted-foreground">
 			Published by {authorName} &middot; {publishedDate}
 			{wasUpdated && <> &middot; Last updated {updatedDate}</>}
 		</p>
 
 		<a
-			class="inline-flex shrink-0 items-center gap-x-1 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover"
+			class="flex items-center justify-center gap-x-1 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover sm:inline-flex sm:w-auto sm:shrink-0"
 			href={`/posts/${slug}`}
 		>
-			Continue reading →
+			Quick read →
 		</a>
 	</div>
 </article>

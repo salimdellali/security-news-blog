@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import PostList, { type Post } from "../components/PostList.astro";
 
-const res = await fetch("https://security-news-blog-cms.onrender.com/api/posts?populate=createdBy");
+const res = await fetch("https://security-news-blog-cms.onrender.com/api/posts?populate=createdBy&sort=publishedAt:desc");
 const { data: posts }: { data: Post[] } = await res.json();
 ---
 
