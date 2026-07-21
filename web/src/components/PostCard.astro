@@ -10,7 +10,12 @@ interface Props {
 
 const { slug, title, excerpt, publishedAt, updatedAt, authorName } = Astro.props;
 
-const dateFormat: Intl.DateTimeFormatOptions = { year: "numeric", month: "short", day: "numeric" };
+const dateFormat: Intl.DateTimeFormatOptions = {
+	year: "numeric",
+	month: "short",
+	day: "numeric",
+	timeZone: "America/Toronto",
+};
 const publishedDate = new Date(publishedAt).toLocaleDateString("en-US", dateFormat);
 const updatedDate = new Date(updatedAt).toLocaleDateString("en-US", dateFormat);
 const wasUpdated = updatedDate !== publishedDate;

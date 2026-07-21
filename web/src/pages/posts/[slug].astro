@@ -23,7 +23,12 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props as { post: Post };
 
-const dateFormat: Intl.DateTimeFormatOptions = { year: "numeric", month: "short", day: "numeric" };
+const dateFormat: Intl.DateTimeFormatOptions = {
+	year: "numeric",
+	month: "short",
+	day: "numeric",
+	timeZone: "America/Toronto",
+};
 const publishedDate = new Date(post.publishedAt).toLocaleDateString("en-US", dateFormat);
 const updatedDate = new Date(post.updatedAt).toLocaleDateString("en-US", dateFormat);
 const wasUpdated = updatedDate !== publishedDate;
