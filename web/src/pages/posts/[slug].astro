@@ -5,6 +5,7 @@ import Layout from "../../layouts/Layout.astro";
 interface Post {
 	slug: string;
 	title: string;
+	excerpt: string;
 	body: string;
 	publishedAt: string;
 	updatedAt: string;
@@ -47,6 +48,9 @@ const bodyHtml = await marked.parse(post.body);
 			Published by {authorName} &middot; {publishedDate}
 			{wasUpdated && <> &middot; Last updated {updatedDate}</>}
 		</p>
-		<div class="prose prose-neutral prose-lg mt-5 max-w-none" set:html={bodyHtml} />
+		<blockquote class="mt-6 border-l-4 border-primary pl-4 text-lg italic text-muted-foreground-1">
+			{post.excerpt}
+		</blockquote>
+		<div class="prose prose-neutral prose-lg mt-6 max-w-none prose-headings:mt-6" set:html={bodyHtml} />
 	</article>
 </Layout>
