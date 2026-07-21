@@ -43,10 +43,10 @@ const bodyHtml = await marked.parse(post.body);
 			&larr; Back to home
 		</a>
 		<h1 class="mt-4 font-mono text-2xl font-semibold sm:text-3xl">{post.title}</h1>
-		<p class="mt-2 text-xs text-muted-foreground">
+		<p class="mt-2 pb-6 border-b border-border text-sm text-muted-foreground">
 			Published by {authorName} &middot; {publishedDate}
 			{wasUpdated && <> &middot; Last updated {updatedDate}</>}
 		</p>
-		<div class="prose prose-neutral mt-8 max-w-none" set:html={bodyHtml} />
+		<div class="prose prose-neutral prose-lg mt-5 max-w-none" set:html={bodyHtml} />
 	</article>
 </Layout>
