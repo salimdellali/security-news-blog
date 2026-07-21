@@ -1,4 +1,6 @@
 ---
+import ShieldIcon from "./icons/ShieldIcon.astro";
+
 interface Props {
 	title: string;
 	tagline: string;
@@ -13,13 +15,9 @@ const { title, tagline } = Astro.props;
 			class="inline-flex items-center gap-x-2 font-mono text-2xl sm:text-4xl font-semibold text-center text-foreground-inverse focus:outline-hidden focus:opacity-80"
 			href="/"
 		>
-			<svg class="size-6 sm:size-8 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-				<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
-			</svg>
+			<ShieldIcon class="size-6 sm:size-8 shrink-0" />
 			{title}
-			<svg class="size-6 sm:size-8 shrink-0" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-				<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
-			</svg>
+			<ShieldIcon class="size-6 sm:size-8 shrink-0" />
 		</a>
 		<p class="text-sm italic sm:tracking-[0.4em] tracking-widest text-center text-foreground-inverse/80">{tagline}</p>
 	</nav>
