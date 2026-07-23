@@ -18,7 +18,7 @@ const dateFormat: Intl.DateTimeFormatOptions = {
 };
 const publishedDate = new Date(publishedAt).toLocaleDateString("en-US", dateFormat);
 const updatedDate = new Date(updatedAt).toLocaleDateString("en-US", dateFormat);
-const wasUpdated = updatedDate !== publishedDate;
+const wasUpdated = new Date(updatedAt) > new Date(publishedAt);
 ---
 
 <article class="flex h-full flex-col gap-2 border border-border p-6 transition-shadow hover:shadow-md">

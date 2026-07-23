@@ -36,9 +36,11 @@ const dateFormat: Intl.DateTimeFormatOptions = {
 	day: "numeric",
 	timeZone: "America/Toronto",
 };
-const publishedDate = new Date(post.publishedAt).toLocaleDateString("en-US", dateFormat);
-const updatedDate = new Date(post.updatedAt).toLocaleDateString("en-US", dateFormat);
-const wasUpdated = updatedDate !== publishedDate;
+const publishedAt = new Date(post.publishedAt);
+const updatedAt = new Date(post.updatedAt);
+const publishedDate = publishedAt.toLocaleDateString("en-US", dateFormat);
+const updatedDate = updatedAt.toLocaleDateString("en-US", dateFormat);
+const wasUpdated = updatedAt > publishedAt;
 const authorName = `${post.createdBy.firstname} ${post.createdBy.lastname}`;
 
 const bodyHtml = await marked.parse(post.body);
