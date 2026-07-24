@@ -1,0 +1,130 @@
+---
+import DigitZeroIcon from "../icons/DigitZeroIcon.astro";
+import DigitOneIcon from "../icons/DigitOneIcon.astro";
+import BugIcon from "../icons/BugIcon.astro";
+import MagnifierIcon from "../icons/MagnifierIcon.astro";
+
+interface GridConfig {
+	cols: number;
+	rows: number;
+}
+
+interface Props {
+	sm: GridConfig;
+	md: GridConfig;
+	lg: GridConfig;
+	xl: GridConfig;
+	twoXl: GridConfig;
+}
+
+const { sm, md, lg, xl, twoXl } = Astro.props;
+
+const WEIGHTED_GLYPH_ICONS = [
+	{ Icon: DigitZeroIcon, weight: 0.49 },
+	{ Icon: DigitOneIcon, weight: 0.49 },
+	{ Icon: BugIcon, weight: 0.01 },
+	{ Icon: MagnifierIcon, weight: 0.01 },
+];
+
+// randomly pick an icon from the weighted list above, 
+// with wights determining the probability of each icon being picked.
+function pickIcon() {
+	const roll = Math.random();
+	let cumulativeWeight = 0;
+
+	for (const { Icon, weight } of WEIGHTED_GLYPH_ICONS) {
+		cumulativeWeight += weight;
+		if (roll < cumulativeWeight) return Icon;
+	}
+
+	return WEIGHTED_GLYPH_ICONS[WEIGHTED_GLYPH_ICONS.length - 1].Icon;
+}
+
+const GLYPH_DENSITY = 0.4;
+const FLICKER_DURATION_SECONDS = 6;
+
+function generateGlyphs({ cols, rows }: GridConfig) {
+	// Divide each axis into cols+1 / rows+1 equal segments and place glyphs
+	// only at the internal boundaries (never at 0% or 100%). That puts every
+	// glyph, and both edges, exactly one segment-width apart from its
+	// neighbors - no separate "gap" concept needed.
+	const glyphs = [];
+
+	for (let row = 1; row <= rows; row++) {
+		for (let col = 1; col <= cols; col++) {
+			// randomly skip some glyphs to achieve the desired density
+			if (Math.random() > GLYPH_DENSITY) continue; 
+
+			glyphs.push({
+				Icon: pickIcon(),
+				top: (row * 100) / (rows + 1),
+				left: (col * 100) / (cols + 1),
+				duration: FLICKER_DURATION_SECONDS,
+				// Negative delay starts the animation mid-cycle instead of at 0%, so
+				// glyphs don't all flicker in sync. The range must equal duration
+				// (not more, not less) so every phase of the cycle is equally likely.
+				delay: Math.random() * -FLICKER_DURATION_SECONDS,
+			});
+		}
+	}
+
+	return glyphs;
+}
+
+// Only one grid is ever visible at a time (via the display classes below) -
+// one per breakpoint tier, since the grid layout is baked at build time and
+// can't respond to viewport size except through CSS.
+const VARIANTS_BY_VIEWPORT = [
+	{ glyphs: generateGlyphs(sm), class: "block md:hidden" },
+	{ glyphs: generateGlyphs(md), class: "hidden md:block lg:hidden" },
+	{ glyphs: generateGlyphs(lg), class: "hidden lg:block xl:hidden" },
+	{ glyphs: generateGlyphs(xl), class: "hidden xl:block 2xl:hidden" },
+	{ glyphs: generateGlyphs(twoXl), class: "hidden 2xl:block" },
+];
+---
+
+{
+	VARIANTS_BY_VIEWPORT.map((variant) => (
+		<div class={`glyph-field absolute inset-0 pointer-events-none ${variant.class}`} aria-hidden="true">
+			{variant.glyphs.map((g) => {
+				const Icon = g.Icon;
+				return (
+					<span
+						class="glyph-item"
+						style={`top:${g.top}%; left:${g.left}%; animation-duration:${g.duration}s; animation-delay:${g.delay}s;`}
+					>
+						<Icon class="block size-3 text-neutral-700" />
+					</span>
+				);
+			})}
+		</div>
+	))
+}
+
+<style>
+	.glyph-item {
+		position: absolute;
+		transform: translate(-50%, -50%);
+		opacity: 0;
+		animation-name: glyph-flicker;
+		animation-timing-function: ease-in-out;
+		animation-iteration-count: infinite;
+	}
+
+	@keyframes glyph-flicker {
+		0%,
+		100% {
+			opacity: 0;
+		}
+		50% {
+			opacity: 1;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.glyph-item {
+			animation: none;
+			opacity: 0.15;
+		}
+	}
+</style>

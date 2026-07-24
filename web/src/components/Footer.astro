@@ -3,12 +3,20 @@ import ShieldIcon from "./icons/ShieldIcon.astro";
 import GithubIcon from "./icons/GithubIcon.astro";
 import LinkedinIcon from "./icons/LinkedinIcon.astro";
 import ExternalLinkIcon from "./icons/ExternalLinkIcon.astro";
+import GlyphField from "./overlays/GlyphField.astro";
 ---
 
-<footer class="w-full py-8 bg-neutral-900 text-center text-sm text-foreground-inverse/80">
-	<div class="max-w-2xl mx-auto px-4">
+<footer class="relative w-full overflow-hidden py-8 bg-neutral-900 text-center text-sm text-foreground-inverse/80">
+	<GlyphField
+		sm={{ cols: 16, rows: 9 }}
+		md={{ cols: 32, rows: 9 }}
+		lg={{ cols: 64, rows: 9 }}
+		xl={{ cols: 80, rows: 9 }}
+		twoXl={{ cols: 120, rows: 9 }}
+	/>
+	<div class="relative max-w-2xl mx-auto px-4">
 		<div class="flex flex-col items-center">
-			<ShieldIcon class="size-5 shrink-0 mb-6 text-foreground-inverse/60" />
+			<ShieldIcon class="size-6 sm:size-8 shrink-0 mb-6" />
 			<div class="flex flex-col items-center gap-1">
 				<p class="font-mono">Built with Astro &middot; Strapi &middot; Neon</p>
 				<p>Content managed headlessly, site rebuilds on publish</p>
@@ -17,7 +25,7 @@ import ExternalLinkIcon from "./icons/ExternalLinkIcon.astro";
 
 		<div class="mt-6 flex flex-wrap items-center justify-center gap-3">
 			<a
-				class="inline-flex items-center gap-x-2 border border-foreground-inverse/30 px-4 py-2 text-foreground-inverse transition-colors hover:bg-foreground-inverse/10"
+				class="inline-flex items-center gap-x-2 border border-foreground-inverse/30 bg-neutral-900 px-4 py-2 text-foreground-inverse transition-colors hover:bg-foreground-inverse/10"
 				target="_blank"
 				rel="noopener noreferrer"
 				href="https://github.com/salimdellali/security-news-blog"
@@ -27,7 +35,7 @@ import ExternalLinkIcon from "./icons/ExternalLinkIcon.astro";
 				<ExternalLinkIcon class="size-3 shrink-0 self-start" />
 			</a>
 			<a
-				class="inline-flex items-center gap-x-2 border border-foreground-inverse/30 px-4 py-2 text-foreground-inverse transition-colors hover:bg-foreground-inverse/10"
+				class="inline-flex items-center gap-x-2 border border-foreground-inverse/30 bg-neutral-900 px-4 py-2 text-foreground-inverse transition-colors hover:bg-foreground-inverse/10"
 				target="_blank"
 				rel="noopener noreferrer"
 				href="https://www.linkedin.com/in/dellalisalim/"

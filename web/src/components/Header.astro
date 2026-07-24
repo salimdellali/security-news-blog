@@ -1,5 +1,6 @@
 ---
 import ShieldIcon from "./icons/ShieldIcon.astro";
+import GlyphField from "./overlays/GlyphField.astro";
 
 interface Props {
 	title: string;
@@ -9,8 +10,15 @@ interface Props {
 const { title, tagline } = Astro.props;
 ---
 
-<header class="w-full py-6 bg-neutral-900">
-	<nav class="max-w-2xl mx-auto px-4 flex flex-col items-center gap-1">
+<header class="relative w-full overflow-hidden py-6 bg-neutral-900">
+	<GlyphField
+		sm={{ cols: 16, rows: 4 }}
+		md={{ cols: 32, rows: 4 }}
+		lg={{ cols: 64, rows: 4 }}
+		xl={{ cols: 80, rows: 4 }}
+		twoXl={{ cols: 120, rows: 4 }}
+	/>
+	<nav class="relative max-w-2xl mx-auto px-4 flex flex-col items-center gap-1">
 		<a
 			class="inline-flex items-center gap-x-2 font-mono text-2xl sm:text-4xl font-semibold text-center text-foreground-inverse focus:outline-hidden focus:opacity-80"
 			href="/"
